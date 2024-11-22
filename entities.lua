@@ -15,7 +15,7 @@ function leclaireur.gravity_auto_correction(self, dtime)
     self._taxing_gravity = self._taxing_gravity or target_anti_gravity
     --minetest.chat_send_player(self.driver_name, "antes: " .. self._taxing_gravity)
     if self._taxing_gravity > target_anti_gravity then factor = -1 end
-    local time_correction = (dtime/automobiles_lib.ideal_step)
+    local time_correction = (dtime/airutils.ideal_step)
     local intensity = 1
     local correction = (intensity*factor) * time_correction
     if math.abs(correction) > 1 then correction = 1 * math.sign(correction) end
