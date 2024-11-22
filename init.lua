@@ -411,7 +411,7 @@ function leclaireur.logic(self)
             accel = airutils.autopilot(self, self.dtime, hull_direction, longit_speed, accel, curr_pos)
         end
     end
-    if self.isonground and longit_speed < 0.5 then stop = true end
+    --if self.isonground and longit_speed < 1.0 then stop = true end
     --end accell
 
     --get disconnected players
@@ -454,16 +454,14 @@ function leclaireur.logic(self)
 
     local new_accel = accel
     self.gravity_last_status_message = self.gravity_last_status_message or 0
-    local gravity_status = 0
+    self.gravity_status = self.gravity_last_status_message
 
     --local is_stall = longit_speed < (self._min_speed+0.5) and climb_rate < -1.5 and is_flying
     --force no gravity
     local enable_no_gravity = false
-    if ctrl then
-        enable_no_gravity = (self._power_lever <= 0 and ctrl.down )
-    end
-    if longit_speed > 12 and not enable_no_gravity then
-        gravity_status = 0
+
+    if longit_speed > 12 then
+        self.gravity_status = 0
         --[[lets do something interesting:
         here I'll fake the longit speed effect for takeoff, to force the airplane
         to use more runway
@@ -483,14 +481,18 @@ function leclaireur.logic(self)
 
         local ceiling = 31000
         new_accel = airutils.getLiftAccel(self, velocity, new_accel, factorized_longit_speed, roll, curr_pos, self._lift, ceiling, self._wing_span)
-    else
+    end
+    if ctrl then
+        enable_no_gravity = (self._power_lever <= 0 and ctrl.down )
+        if enable_no_gravity then self.gravity_status = 1 end
+    end
+    if self.gravity_status == 1 then
         --gravity works
         if not self._engine_running then
             --new_accel.y = airutils.gravity
-            gravity_status = 0
+            self.gravity_status = 0
         else
             --antigravity
-            gravity_status = 1
             leclaireur.gravity_auto_correction(self, self.dtime)
             local player = core.get_player_by_name(self.driver_name or "")
             if player then
@@ -503,13 +505,13 @@ function leclaireur.logic(self)
         end
     end
     -- end lift
-    if self.gravity_last_status_message ~= gravity_status then
-        self.gravity_last_status_message = gravity_status
-        if gravity_status == 0 then
-            core.chat_send_player(self.driver_name, core.colorize('#ff0000',"Antigravity was turned off"))
+    if self.gravity_last_status_message ~= self.gravity_status then
+        self.gravity_last_status_message = self.gravity_status
+        if self.gravity_status == 0 then
+            core.chat_send_player(self.driver_name or "", core.colorize('#ff0000',"Antigravity was turned off"))
         else
             self._taxing_gravity = 1 + (airutils.gravity*-1)
-            core.chat_send_player(self.driver_name, core.colorize('#00ff00',"Antigravity was turned on"))
+            core.chat_send_player(self.driver_name or "", core.colorize('#00ff00',"Antigravity was turned on"))
             minetest.sound_play("leclaireur_alert", {
                 object = self.object,
                 max_hear_distance = 15,
@@ -519,7 +521,6 @@ function leclaireur.logic(self)
             })
         end
     end
-
 
     --wind effects
     if longit_speed > 1.5 and airutils.wind then

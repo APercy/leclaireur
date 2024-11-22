@@ -28,17 +28,6 @@ function leclaireur.gravity_auto_correction(self, dtime)
         self._taxing_gravity = new_taxing_gravity
     end
 
-    --now desacelerate
-
-    --[[local curr_vel = self.object:get_velocity()
-    if curr_vel.y < 0 then
-        self._taxing_gravity = 0.5
-    else
-        self._taxing_gravity = -0.5
-    end]]--
-
-    
-    --minetest.chat_send_player(self.driver_name, "depois: " .. self._taxing_gravity)
 end
 
 function leclaireur.control_flight(self, player)
@@ -52,6 +41,11 @@ function leclaireur.control_flight(self, player)
     elseif ctrl.up then
         if self._taxing_gravity > min then
             self._taxing_gravity = self._taxing_gravity - 1
+            if self.isonground then
+                self.gravity_status = 0
+                self.object:set_acceleration({x=0,y=0,z=0})
+                self.object:set_velocity({x=0,y=0,z=0})
+            end
         end
     end
 end
