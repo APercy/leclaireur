@@ -473,7 +473,7 @@ function leclaireur.logic(self)
             end
         end
 
-        local ceiling = 15000
+        local ceiling = 31000
         new_accel = airutils.getLiftAccel(self, velocity, new_accel, factorized_longit_speed, roll, curr_pos, self._lift, ceiling, self._wing_span)
     else
         --gravity works
@@ -500,7 +500,7 @@ function leclaireur.logic(self)
         if gravity_status == 0 then
             core.chat_send_player(self.driver_name, core.colorize('#ff0000',"Antigravity was turned off"))
         else
-            self._taxing_gravity = 100 + (airutils.gravity*-1)
+            self._taxing_gravity = 5 + (airutils.gravity*-1)
             core.chat_send_player(self.driver_name, core.colorize('#00ff00',"Antigravity was turned on"))
             minetest.sound_play("leclaireur_alert", {
                 object = self.object,
