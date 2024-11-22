@@ -27,7 +27,7 @@ function leclaireur.destroy_parts_method(self)
 end
 
 function leclaireur.step_additional_function(self)
-    if self.isonground and self._engine_running == false then
+    if self._engine_running == false then
         --minetest.chat_send_all("no chão")
         self.object:set_animation({x = 40, y = 40}, 0, 0, false)
     else
