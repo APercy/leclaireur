@@ -491,6 +491,7 @@ function leclaireur.logic(self)
         else
             --antigravity
             gravity_status = 1
+            leclaireur.gravity_auto_correction(self, self.dtime)
             local player = core.get_player_by_name(self.driver_name or "")
             if player then
                 leclaireur.control_flight(self, player)
@@ -499,7 +500,6 @@ function leclaireur.logic(self)
             self._taxing_gravity = self._taxing_gravity or 0
             local y_accel = self._taxing_gravity + (airutils.gravity*-1)
             new_accel.y = y_accel --sets the anti gravity
-            leclaireur.gravity_auto_correction(self, self.dtime)
         end
     end
     -- end lift

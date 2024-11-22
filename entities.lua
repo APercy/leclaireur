@@ -16,7 +16,7 @@ function leclaireur.gravity_auto_correction(self, dtime)
     --minetest.chat_send_player(self.driver_name, "antes: " .. self._taxing_gravity)
     if self._taxing_gravity > target_anti_gravity then factor = -1 end
     local time_correction = (dtime/airutils.ideal_step)
-    local intensity = 1
+    local intensity = 2
     local correction = (intensity*factor) * time_correction
     if math.abs(correction) > 1 then correction = 1 * math.sign(correction) end
     --minetest.chat_send_player(self.driver_name, correction)
@@ -30,12 +30,12 @@ function leclaireur.gravity_auto_correction(self, dtime)
 
     --now desacelerate
 
-    local curr_vel = self.object:get_velocity()
+    --[[local curr_vel = self.object:get_velocity()
     if curr_vel.y < 0 then
         self._taxing_gravity = 0.5
     else
         self._taxing_gravity = -0.5
-    end
+    end]]--
 
     
     --minetest.chat_send_player(self.driver_name, "depois: " .. self._taxing_gravity)
