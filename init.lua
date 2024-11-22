@@ -411,6 +411,7 @@ function leclaireur.logic(self)
             accel = airutils.autopilot(self, self.dtime, hull_direction, longit_speed, accel, curr_pos)
         end
     end
+    if self.isonground and longit_speed < 0.5 then stop = true end
     --end accell
 
     --get disconnected players
@@ -456,6 +457,7 @@ function leclaireur.logic(self)
     local gravity_status = 0
 
     --local is_stall = longit_speed < (self._min_speed+0.5) and climb_rate < -1.5 and is_flying
+    --force no gravity
     local enable_no_gravity = false
     if ctrl then
         enable_no_gravity = (self._power_lever <= 0 and ctrl.down )
