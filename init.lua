@@ -142,8 +142,9 @@ function leclaireur.logic(self)
 
     --if self._autoflymode == true then airutils.seats_update(self) end
 
+    local ctrl = nil
     if player then
-        local ctrl = player:get_player_control()
+        ctrl = player:get_player_control()
         ---------------------
         -- change the driver
         ---------------------
@@ -454,8 +455,13 @@ function leclaireur.logic(self)
     self.gravity_last_status_message = self.gravity_last_status_message or 0
     local gravity_status = 0
 
-    local is_stall = longit_speed < (self._min_speed+0.5) and climb_rate < -1.5 and is_flying
-    if longit_speed > 12 and not is_stall then
+    --local is_stall = longit_speed < (self._min_speed+0.5) and climb_rate < -1.5 and is_flying
+    local enable_no_gravity = false
+    if ctrl then
+        enable_no_gravity = (self._power_lever <= 0 and ctrl.down )
+    end
+    if longit_speed > 12 and not enable_no_gravity then
+        gravity_status = 0
         --[[lets do something interesting:
         here I'll fake the longit speed effect for takeoff, to force the airplane
         to use more runway
@@ -478,7 +484,7 @@ function leclaireur.logic(self)
     else
         --gravity works
         if not self._engine_running then
-            new_accel.y = airutils.gravity
+            --new_accel.y = airutils.gravity
             gravity_status = 0
         else
             --antigravity
