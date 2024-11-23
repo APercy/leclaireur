@@ -513,7 +513,7 @@ function leclaireur.logic(self)
         if self.gravity_status == 0 then
             core.chat_send_player(self.driver_name or "", core.colorize('#ff0000',"Antigravity was turned off"))
         else
-            self._taxing_gravity = 0.3 + (airutils.gravity*-1)
+            --self._taxing_gravity = 0.3 + (airutils.gravity*-1)
             core.chat_send_player(self.driver_name or "", core.colorize('#00ff00',"Antigravity was turned on"))
             minetest.sound_play("leclaireur_alert", {
                 object = self.object,
