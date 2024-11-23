@@ -405,7 +405,7 @@ function leclaireur.logic(self)
     ------------------------------------------------------
     if is_attached or co_pilot then
         if self._autopilot ~= true then
-            accel, stop = airutils.control(self, self.dtime, hull_direction,
+            accel, stop = leclaireur.control(self, self.dtime, hull_direction,
                 longit_speed, longit_drag, later_speed, later_drag, accel, pilot, is_flying)
         else
             accel = airutils.autopilot(self, self.dtime, hull_direction, longit_speed, accel, curr_pos)
