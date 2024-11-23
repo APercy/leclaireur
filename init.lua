@@ -453,7 +453,7 @@ function leclaireur.logic(self)
     end
 
     local new_accel = accel
-    self.gravity_last_status_message = self.gravity_last_status_message or 0
+    self.gravity_last_status_message = self.gravity_last_status_message or 1
     self.gravity_status = self.gravity_last_status_message
 
     --local is_stall = longit_speed < (self._min_speed+0.5) and climb_rate < -1.5 and is_flying
@@ -481,6 +481,8 @@ function leclaireur.logic(self)
 
         local ceiling = 31000
         new_accel = airutils.getLiftAccel(self, velocity, new_accel, factorized_longit_speed, roll, curr_pos, self._lift, ceiling, self._wing_span)
+    else
+        self.gravity_status = 1
     end
     if ctrl then
         enable_no_gravity = (self._power_lever <= 0 and ctrl.down )
@@ -500,6 +502,7 @@ function leclaireur.logic(self)
             end
 
             self._taxing_gravity = self._taxing_gravity or 0
+            
             local y_accel = self._taxing_gravity + (airutils.gravity*-1)
             new_accel.y = y_accel --sets the anti gravity
         end
@@ -754,6 +757,7 @@ leclaireur.plane_properties = {
     _plane_y_offset_for_bullet = 1,
     _name_color = 0,
     _name_hor_aligment = 3.0,
+    --_ground_friction = 0.8,
     --_custom_punch_when_attached = ww1_planes_lib._custom_punch_when_attached, --the method to execute click action inside the plane
     _custom_pilot_formspec = airutils.pilot_formspec,
     --_custom_pilot_formspec = leclaireur.pilot_formspec,

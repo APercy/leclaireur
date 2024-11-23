@@ -42,7 +42,9 @@ function leclaireur.control_flight(self, player)
         if self._taxing_gravity > min then
             self._taxing_gravity = self._taxing_gravity - 1
             if self.isonground then
-                self.gravity_status = 0
+                self._power_lever = 0
+                --self.gravity_status = 0
+                self._last_vel = {x=0,y=0,z=0}
                 self.object:set_acceleration({x=0,y=0,z=0})
                 self.object:set_velocity({x=0,y=0,z=0})
             end
